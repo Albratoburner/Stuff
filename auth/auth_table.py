@@ -1,4 +1,4 @@
-from auth_database import engine, Base
-import models
+from .auth_database import engine, Base
+from . import models
+
 Base.metadata.create_all(bind=engine)
- 

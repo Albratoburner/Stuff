@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-import models, schemas, utils
-from auth_database import get_db
+from . import models, schemas, utils
+from .auth_database import get_db
 from jose import jwt
 from datetime import datetime, timedelta
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import JWTError
+import os
 
 # Should be in env
 SECRET_KEY = "b1IAXThgTpT12ZBOfyP2WWTxxyl6PQ34_vXMkwdsSkw"
@@ -80,6 +81,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 @app.get("/protected")
 def protected_route(current_user: dict = Depends(get_current_user)):
     return {"Message": f"Hello, {current_user['username']}"}
+
 def require_roles(allowed_roles: list[str]):
     def role_checker(current_user: dict = Depends(get_current_user)):
         user_role = current_user.get("role")
